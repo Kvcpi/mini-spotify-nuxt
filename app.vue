@@ -144,10 +144,10 @@ const musicData = [
   },
   {
     id: 3,
-    title: "Sunset Melody",
-    artist: "Virtual Band",
-    coverUrl: "/placeholder-cover-3.jpg",
-    audioUrl: "/music/track3.mp3"
+    title: "Pour Vanessa ♥",
+    artist: "Moi ☺",
+    coverUrl: "/cover/Vanessa.jpeg",
+    audioUrl: "/music/Pour toi Vanessa !.mp3"
   }
 ]
 
