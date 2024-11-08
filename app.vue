@@ -148,6 +148,13 @@ const musicData = [
     artist: "Moi ☺",
     coverUrl: "/cover/Vanessa.jpeg",
     audioUrl: "/music/Pour toi Vanessa !.mp3"
+  },
+  {
+    id: 4,
+    title: "Pour Karol hehe",
+    artist: "Moi ☺",
+    coverUrl: "/cover/Karol.jpeg",
+    audioUrl: "/music/Mon pote Karol.mp3"
   }
 ]
 
