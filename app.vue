@@ -1,24 +1,23 @@
-// pages/index.vue
 <template>
-  <div :class="[darkMode ? 'dark bg-gray-900' : 'bg-gray-50']">
+  <div :class="[darkMode ? 'dark bg-gray-900' : 'bg-gray-100']">
     <!-- Header avec recherche et dark mode -->
-    <header class="sticky top-0 z-10 backdrop-blur-lg bg-opacity-90 p-4 border-b dark:border-gray-700">
+    <header class="sticky top-0 z-10 backdrop-blur-lg bg-opacity-90 p-4 border-b dark:border-gray-700 bg-white dark:bg-gray-800 shadow-md">
       <div class="max-w-7xl mx-auto flex justify-between items-center">
-        <h1 class="text-2xl font-bold dark:text-white">Lecteur Musical AI</h1>
+        <h1 class="text-2xl font-bold dark:text-white transition duration-300 ease-in-out transform hover:scale-105">Lecteur Musical AI</h1>
         <div class="flex items-center gap-4">
           <input
             v-model="searchQuery"
             type="text"
             placeholder="Rechercher..."
-            class="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border dark:border-gray-700 dark:text-white"
+            class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 border dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 ease-in-out"
           />
           <button
             @click="toggleDarkMode"
-            class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
+            class="p-2 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition transform duration-200 ease-in-out"
           >
             <Icon
               :name="darkMode ? 'ph:sun-bold' : 'ph:moon-bold'"
-              class="w-6 h-6 dark:text-white"
+              class="w-6 h-6"
             />
           </button>
         </div>
@@ -26,15 +25,15 @@
     </header>
 
     <!-- Grille des musiques -->
-    <main class="max-w-7xl mx-auto p-4">
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <main class="max-w-7xl mx-auto p-4 py-8">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         <div
           v-for="track in filteredTracks"
           :key="track.id"
           class="cursor-pointer transform transition-all duration-300 hover:scale-105"
           @click="selectTrack(track)"
         >
-          <div class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+          <div class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg transition duration-300 ease-in-out hover:shadow-xl hover:bg-gray-100 dark:hover:bg-gray-700">
             <img
               :src="track.coverUrl"
               :alt="track.title"
@@ -56,13 +55,13 @@
     <!-- Lecteur audio -->
     <div
       v-if="currentTrack"
-      class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t dark:border-gray-700 p-4"
+      class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t dark:border-gray-700 p-4 z-50 shadow-lg rounded-t-3xl"
     >
       <div class="max-w-7xl mx-auto flex items-center gap-4">
         <img
           :src="currentTrack.coverUrl"
           :alt="currentTrack.title"
-          class="w-16 h-16 rounded-lg"
+          class="w-16 h-16 rounded-lg shadow-md"
         />
         <div class="flex-1">
           <h3 class="font-semibold dark:text-white">{{ currentTrack.title }}</h3>
@@ -73,13 +72,13 @@
         <!-- Contrôles de lecture -->
         <div class="flex items-center gap-4">
           <button
-            class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-white"
+            class="p-2 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transform transition-all duration-200 ease-in-out"
             @click="previousTrack"
           >
             <Icon name="ph:skip-back-bold" class="w-6 h-6" />
           </button>
           <button
-            class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-white"
+            class="p-2 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transform transition-all duration-200 ease-in-out"
             @click="togglePlay"
           >
             <Icon
@@ -88,20 +87,29 @@
             />
           </button>
           <button
-            class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-white"
+            class="p-2 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transform transition-all duration-200 ease-in-out"
             @click="nextTrack"
           >
             <Icon name="ph:skip-forward-bold" class="w-6 h-6" />
           </button>
         </div>
       </div>
-      <!-- Barre de progression -->
+      <!-- Barre de progression et temps -->
       <div class="max-w-7xl mx-auto mt-2">
-        <div class="bg-gray-200 dark:bg-gray-700 rounded-full h-1">
+        <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+          <!-- Temps écoulé -->
+          <span>{{ formattedCurrentTime }}</span>
           <div
-            class="bg-blue-500 h-full rounded-full"
-            :style="{ width: `${progress}%` }"
-          ></div>
+            class="bg-gray-300 dark:bg-gray-600 rounded-full h-2 flex-1 mx-2 cursor-pointer relative"
+            @click="seekToPosition"
+          >
+            <div
+              class="bg-blue-500 h-full rounded-full absolute top-0 left-0"
+              :style="{ width: `${progress}%` }"
+            ></div>
+          </div>
+          <!-- Temps total -->
+          <span>{{ formattedDuration }}</span>
         </div>
       </div>
     </div>
@@ -109,13 +117,16 @@
 </template>
 
 <script setup>
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+
 const darkMode = ref(false)
 const searchQuery = ref('')
 const currentTrack = ref(null)
 const isPlaying = ref(false)
 const progress = ref(0)
+const duration = ref(0)
+const currentTime = ref(0)
 
-// Exemple de données (à remplacer par vos musiques générées)
 const musicData = [
   {
     id: 1,
@@ -127,7 +138,7 @@ const musicData = [
   {
     id: 2,
     title: "Digital Dreams",
-    artist: "MohamedMoussa",
+    artist: "Baguette",
     coverUrl: "/cover/DigitalDreams.jpeg",
     audioUrl: "/music/Digital Dreams.mp3"
   },
@@ -140,7 +151,6 @@ const musicData = [
   }
 ]
 
-// Filtrage des musiques
 const filteredTracks = computed(() => {
   if (!searchQuery.value) return musicData
   const query = searchQuery.value.toLowerCase()
@@ -150,12 +160,12 @@ const filteredTracks = computed(() => {
   )
 })
 
-// Gestion de l'audio
 const audio = ref(null)
 
 onMounted(() => {
   audio.value = new Audio()
   audio.value.addEventListener('timeupdate', updateProgress)
+  audio.value.addEventListener('loadedmetadata', handleLoadedMetadata)
   audio.value.addEventListener('ended', () => {
     nextTrack()
   })
@@ -164,11 +174,18 @@ onMounted(() => {
 onUnmounted(() => {
   if (audio.value) {
     audio.value.removeEventListener('timeupdate', updateProgress)
+    audio.value.removeEventListener('loadedmetadata', handleLoadedMetadata)
     audio.value.removeEventListener('ended', () => {})
   }
 })
 
-// Fonctions de contrôle
+function handleLoadedMetadata() {
+  if (audio.value && !isNaN(audio.value.duration)) {
+    duration.value = audio.value.duration
+    progress.value = (audio.value.currentTime / audio.value.duration) * 100
+  }
+}
+
 function toggleDarkMode() {
   darkMode.value = !darkMode.value
 }
@@ -195,19 +212,47 @@ function togglePlay() {
 
 function updateProgress() {
   if (!audio.value) return
-  const value = (audio.value.currentTime / audio.value.duration) * 100
-  progress.value = value || 0
+  currentTime.value = audio.value.currentTime
+  progress.value = (currentTime.value / duration.value) * 100
 }
 
-function nextTrack() {
-  const currentIndex = musicData.findIndex(track => track.id === currentTrack.value?.id)
-  const nextIndex = (currentIndex + 1) % musicData.length
-  selectTrack(musicData[nextIndex])
+function seekToPosition(event) {
+  if (!audio.value) return
+  
+  const rect = event.target.getBoundingClientRect()
+  const clickX = event.clientX - rect.left
+  const seekPosition = (clickX / rect.width) * duration.value
+  
+  if (audio.value) {
+    audio.value.currentTime = seekPosition
+  }
 }
 
 function previousTrack() {
-  const currentIndex = musicData.findIndex(track => track.id === currentTrack.value?.id)
-  const prevIndex = (currentIndex - 1 + musicData.length) % musicData.length
-  selectTrack(musicData[prevIndex])
+  const currentIndex = musicData.indexOf(currentTrack.value)
+  const previousTrackIndex = (currentIndex - 1 + musicData.length) % musicData.length
+  selectTrack(musicData[previousTrackIndex])
+}
+
+function nextTrack() {
+  const currentIndex = musicData.indexOf(currentTrack.value)
+  const nextTrackIndex = (currentIndex + 1) % musicData.length
+  selectTrack(musicData[nextTrackIndex])
+}
+
+const formattedCurrentTime = computed(() => formatTime(currentTime.value))
+const formattedDuration = computed(() => formatTime(duration.value))
+
+function formatTime(seconds) {
+  const minutes = Math.floor(seconds / 60)
+  const remainingSeconds = Math.floor(seconds % 60)
+  return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`
 }
 </script>
+
+<style scoped>
+/* Styles pour les boutons et animations */
+button:focus {
+  outline: none;
+}
+</style>
