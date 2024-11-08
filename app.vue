@@ -128,7 +128,7 @@ const musicData = [
     id: 2,
     title: "Digital Dreams",
     artist: "MohamedMoussa",
-    coverUrl: "/cover/digitalDreams.jpeg",
+    coverUrl: "/cover/DigitalDreams.jpeg",
     audioUrl: "/music/Digital Dreams.mp3"
   },
   {
