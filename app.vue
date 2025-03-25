@@ -9,7 +9,7 @@
             v-model="searchQuery"
             type="text"
             placeholder="Rechercher..."
-            class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 border dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 ease-in-out"
+            class="px-4 py-2 rounded-lg bg-blue-500 dark:bg-gray-700 border dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 ease-in-out"
           />
           <button
             @click="toggleDarkMode"
